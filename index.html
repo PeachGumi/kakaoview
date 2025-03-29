@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="app-version" content="1.0.7">
-    <title>カカオトーク風トーク画面 v1.0.7</title>
+    <meta name="app-version" content="1.0.8">
+    <title>カカオトーク風トーク画面 v1.0.8</title>
     <style>
         * {
             margin: 0;
@@ -330,8 +330,7 @@
             white-space: nowrap;
             text-align: center;
             flex-shrink: 0;
-            flex: 1;
-            min-width: 0;
+            min-width: 60px;
         }
         
         .file-input-label {
@@ -411,13 +410,20 @@
         @media (max-width: 500px) {
             .input-area {
                 padding: 10px;
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            
+            .input-area::-webkit-scrollbar {
+                display: none;
             }
             
             .file-input-label, .file-input-button {
-                padding: 8px 10px;
+                padding: 8px 12px;
                 font-size: 13px;
-                min-width: 80px;
+                min-width: 60px;
             }
             
             .icon-preview {
@@ -435,7 +441,16 @@
             }
             
             .chat-messages {
-                padding-bottom: 80px; /* 入力エリアの高さ分の余白を確保 */
+                padding-bottom: 80px;
+            }
+            
+            .icon-input-area {
+                flex-shrink: 0;
+            }
+            
+            .file-input-area {
+                flex-shrink: 0;
+                min-width: max-content;
             }
         }
     </style>
@@ -474,7 +489,7 @@
     </div>
 
     <!-- バージョン情報表示 -->
-    <div class="version-info" id="versionDisplay">v1.0.7</div>
+    <div class="version-info" id="versionDisplay">v1.0.8</div>
 
     <div class="media-popup" id="imagePopup">
         <span class="close-popup">&times;</span>
@@ -494,7 +509,7 @@
 
     <script>
         // バージョン情報
-        const version = '1.0.7';
+        const version = '1.0.8';
         document.title = `カカオトーク風トーク画面 v${version}`;
         document.getElementById('versionDisplay').textContent = `v${version}`;
         console.log(`カカオトーク風トーク画面 v${version}`);
