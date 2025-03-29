@@ -78,7 +78,7 @@
             z-index: 99;
             box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
             padding-bottom: env(safe-area-inset-bottom);
-            flex-shrink: 0; /* 追加: 入力エリアが縮小しないように */
+            flex-shrink: 0;
         }
         
         .input-area {
@@ -89,8 +89,6 @@
             width: 100%;
         }
 
-        /* その他のスタイルは変更なし */
-        
         .header-name {
             font-size: 18px;
             text-align: left;
@@ -592,7 +590,7 @@
                     reader.onload = function(e) {
                         parseKakaoTalkText(e.target.result);
                     };
-                    reader.readAsText(file);
+                    reader.readAsText(file, 'UTF-8');
                 } else {
                     alert('テキストファイル(.txt)を選択してください');
                 }
@@ -637,17 +635,20 @@
                 const trimmedLine = line.trim();
                 if (trimmedLine === '') continue;
                 
+                // 日付行の判定（"年月日"を含む行）
                 if (trimmedLine.includes('年') && trimmedLine.includes('月') && trimmedLine.includes('日')) {
                     currentDate = trimmedLine;
                     continue;
                 }
                 
-                if (trimmedLine.includes(', ') && trimmedLine.includes(' : ')) {
-                    const parts = trimmedLine.split(', ');
-                    const datetimePart = parts[0];
-                    const rest = parts[1].split(' : ');
-                    const sender = rest[0].trim();
-                    const content = rest.slice(1).join(' : ').trim();
+                // メッセージ行の解析（カンマとコロンで分割）
+                const commaIndex = trimmedLine.indexOf(',');
+                const colonIndex = trimmedLine.indexOf(' : ');
+                
+                if (commaIndex > 0 && colonIndex > commaIndex) {
+                    const datetimePart = trimmedLine.substring(0, commaIndex).trim();
+                    const sender = trimmedLine.substring(commaIndex + 1, colonIndex).trim();
+                    const content = trimmedLine.substring(colonIndex + 3).trim();
                     
                     if (!me) me = sender;
                     else if (!you && sender !== me) you = sender;
@@ -694,7 +695,7 @@
                 )
                 .filter(msg => isVideo ? msg.isVideo : msg.isPhoto);
             
-            const targetIndex = targetMessagesInsameMinute.length - 1;
+            const targetIndex = targetMessagesInSameMinute.length - 1;
             
             if (matchingFiles[targetIndex]) {
                 return URL.createObjectURL(matchingFiles[targetIndex]);
