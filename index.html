@@ -16,27 +16,25 @@
             background-color: #f5f5f5;
             line-height: 1.6;
             height: 100vh;
+            overflow: hidden;
         }
         
         .main-container {
             max-width: 500px;
             width: 100%;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
             height: 100vh;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
         
         .chat-container {
-            width: 100%;
-            background-color: #f5f5f5;
             flex: 1;
             display: flex;
             flex-direction: column;
             position: relative;
-            border: 1px solid #ddd;
-            height: calc(100vh - 70px);
+            overflow: hidden;
         }
         
         .chat-header {
@@ -70,16 +68,13 @@
             transition: background-color 0.3s;
         }
         
-        .switch-button:hover {
-            background-color: #5a3d3d;
-        }
-        
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 15px 10px 80px;
+            padding: 15px 10px;
             background-color: #f5f5f5;
             -webkit-overflow-scrolling: touch;
+            margin-bottom: 70px;
         }
         
         .date-divider {
@@ -177,7 +172,6 @@
             cursor: pointer;
         }
         
-        /* 複数写真用スタイル */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -213,7 +207,6 @@
             font-size: 11px;
         }
         
-        /* 動画メッセージ用スタイル */
         .video-container {
             position: relative;
             width: 250px;
@@ -223,13 +216,6 @@
             margin-top: 8px;
             background-color: #000;
             cursor: pointer;
-        }
-        
-        .video-thumbnail {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.7;
         }
         
         .video-play-button {
@@ -283,6 +269,14 @@
             align-items: center;
             gap: 10px;
             height: 70px;
+            z-index: 100;
+        }
+        
+        .icon-input-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
         }
         
         .icon-preview {
@@ -295,6 +289,19 @@
             flex-shrink: 0;
         }
         
+        .file-input-area {
+            display: flex;
+            gap: 10px;
+            flex-grow: 1;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .file-input-area::-webkit-scrollbar {
+            display: none;
+        }
+        
         .file-input-label, .file-input-button {
             padding: 8px 12px;
             border-radius: 20px;
@@ -304,10 +311,9 @@
             transition: background-color 0.3s;
             white-space: nowrap;
             text-align: center;
+            flex-shrink: 0;
             flex: 1;
             min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
         
         .file-input-label {
@@ -332,7 +338,6 @@
             display: none;
         }
         
-        /* ポップアップ用スタイル */
         .media-popup {
             display: none;
             position: fixed;
@@ -373,15 +378,9 @@
             z-index: 1001;
         }
 
-        /* スマホ用のレスポンシブスタイル */
         @media (max-width: 500px) {
-            .chat-container {
-                height: calc(100vh - 70px);
-                border: none;
-            }
-            
             .chat-messages {
-                padding-bottom: 80px;
+                margin-bottom: 70px;
             }
             
             .input-area {
@@ -423,17 +422,21 @@
         </div>
 
         <div class="input-area">
-            <img id="iconPreview" class="icon-preview" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+" alt="アイコン">
-            <label for="iconInput" class="file-input-label">アイコン</label>
-            <input type="file" id="iconInput" accept="image/*">
-            <button class="file-input-button" id="loadTalkButton">トーク</button>
-            <input type="file" id="fileInput" accept=".txt">
-            <button class="file-input-button" id="loadMediaButton">写真/動画</button>
-            <input type="file" id="mediaInput" accept="image/*,video/*" multiple>
+            <div class="icon-input-area">
+                <img id="iconPreview" class="icon-preview" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+" alt="アイコン">
+                <label for="iconInput" class="file-input-label">アイコン</label>
+                <input type="file" id="iconInput" accept="image/*">
+            </div>
+            
+            <div class="file-input-area">
+                <button class="file-input-button" id="loadTalkButton">トーク</button>
+                <input type="file" id="fileInput" accept=".txt">
+                <button class="file-input-button" id="loadMediaButton">写真/動画</button>
+                <input type="file" id="mediaInput" accept="image/*,video/*" multiple>
+            </div>
         </div>
     </div>
 
-    <!-- メディアポップアップ用の要素 -->
     <div class="media-popup" id="imagePopup">
         <span class="close-popup">&times;</span>
         <div class="popup-content">
@@ -451,7 +454,6 @@
     </div>
 
     <script>
-        // ユーザー情報を保持する変数
         let me = null;
         let you = null;
         let isSwitched = false;
@@ -459,7 +461,6 @@
         let originalMessages = [];
         let mediaFiles = [];
         
-        // テキストデータを解析
         function parseKakaoTalkText(textData) {
             const lines = textData.split('\n');
             const messagesContainer = document.getElementById('messages');
@@ -489,7 +490,6 @@
                     if (!me) me = sender;
                     else if (!you && sender !== me) you = sender;
                     
-                    // 「写真2枚」のような形式を解析
                     const photoMatch = content.match(/写真(\d+)枚/);
                     const isMultiplePhotos = photoMatch !== null;
                     const photoCount = isMultiplePhotos ? parseInt(photoMatch[1]) : 0;
@@ -511,13 +511,11 @@
             updateHeader();
         }
         
-        // メディアファイル検索（写真/動画）
         function findMediaForMessage(datetimeStr, messageIndex, isVideo = false) {
             const [datePart, timePart] = datetimeStr.split(' ');
             const formattedDate = datePart.replace(/\//g, '');
-            const formattedTime = timePart.replace(/:/g, '').substring(0, 4); // 分まで
+            const formattedTime = timePart.replace(/:/g, '').substring(0, 4);
             
-            // 同じ分のメディアファイルをすべて取得
             const matchingFiles = mediaFiles.filter(file => {
                 const fileName = file.name.toLowerCase();
                 const isTargetType = isVideo ? 
@@ -527,11 +525,10 @@
                 return fileName.startsWith(`${formattedDate}_${formattedTime}`) && isTargetType;
             }).sort((a, b) => a.name.localeCompare(b.name));
             
-            // 同じ分のメッセージの中で何番目の該当メッセージかを取得
             const targetMessagesInSameMinute = originalMessages
                 .filter((msg, idx) => 
                     idx <= messageIndex && 
-                    msg.datetime.startsWith(`${datePart} ${timePart.substring(0, 5)}`) // 分まで一致
+                    msg.datetime.startsWith(`${datePart} ${timePart.substring(0, 5)}`)
                 )
                 .filter(msg => isVideo ? msg.isVideo : msg.isPhoto);
             
@@ -544,20 +541,17 @@
             return null;
         }
         
-        // 複数写真検索
         function findMultiplePhotos(datetimeStr, messageIndex, count) {
             const [datePart, timePart] = datetimeStr.split(' ');
             const formattedDate = datePart.replace(/\//g, '');
             const formattedTime = timePart.replace(/:/g, '').substring(0, 4);
             
-            // 同じ分の画像をすべて取得
             const matchingFiles = mediaFiles.filter(file => {
                 const fileName = file.name.toLowerCase();
                 return fileName.startsWith(`${formattedDate}_${formattedTime}`) && 
                        (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png'));
             }).sort((a, b) => a.name.localeCompare(b.name));
             
-            // 同じ分のメッセージの中で何番目の写真メッセージかを取得
             const photoMessagesInSameMinute = originalMessages
                 .filter((msg, idx) => 
                     idx <= messageIndex && 
@@ -571,7 +565,6 @@
             return matchingFiles.slice(startIndex, endIndex).map(file => URL.createObjectURL(file));
         }
         
-        // メッセージ要素作成
         function createMessageElement(msg, switched, messageIndex) {
             const messageDiv = document.createElement('div');
             const isMe = switched ? msg.sender !== me : msg.sender === me;
@@ -591,7 +584,6 @@
             
             if (msg.isPhoto) {
                 if (msg.photoCount > 0) {
-                    // 複数写真の場合
                     const photoUrls = findMultiplePhotos(msg.datetime, messageIndex, msg.photoCount);
                     
                     if (photoUrls.length > 0) {
@@ -607,7 +599,6 @@
                             img.className = 'photo-grid-img';
                             img.alt = `写真 ${idx + 1}/${photoUrls.length}`;
                             
-                            // 写真枚数表示
                             if (photoUrls.length > 1) {
                                 const countBadge = document.createElement('div');
                                 countBadge.className = 'photo-count';
@@ -618,7 +609,6 @@
                             itemContainer.appendChild(img);
                             gridContainer.appendChild(itemContainer);
                             
-                            // クリックイベント
                             img.addEventListener('click', function() {
                                 const popup = document.getElementById('imagePopup');
                                 const popupImg = document.getElementById('popupImage');
@@ -639,7 +629,6 @@
                         bubbleDiv.textContent = `写真${msg.photoCount}枚（ファイルが見つかりません）`;
                     }
                 } else {
-                    // 単一写真の場合
                     const imageUrl = findMediaForMessage(msg.datetime, messageIndex, false);
                     
                     if (imageUrl) {
@@ -654,7 +643,6 @@
                         photoInfo.textContent = '写真';
                         bubbleDiv.appendChild(photoInfo);
                         
-                        // 画像クリックイベント
                         img.addEventListener('click', function() {
                             const popup = document.getElementById('imagePopup');
                             const popupImg = document.getElementById('popupImage');
@@ -674,7 +662,6 @@
                     const videoContainer = document.createElement('div');
                     videoContainer.className = 'video-container';
                     
-                    // サムネイル表示（簡易実装）
                     const thumbnail = document.createElement('div');
                     thumbnail.style.width = '100%';
                     thumbnail.style.height = '100%';
@@ -685,7 +672,7 @@
                     
                     const durationText = document.createElement('div');
                     durationText.className = 'video-duration';
-                    durationText.textContent = '0:00'; // 実際は動画の長さを取得するのが理想
+                    durationText.textContent = '0:00';
                     
                     videoContainer.appendChild(thumbnail);
                     videoContainer.appendChild(playButton);
@@ -697,7 +684,6 @@
                     videoInfo.textContent = '動画';
                     bubbleDiv.appendChild(videoInfo);
                     
-                    // 動画クリックイベント
                     videoContainer.addEventListener('click', function() {
                         const videoPopup = document.getElementById('videoPopup');
                         const videoPlayer = document.getElementById('videoPlayer');
@@ -706,7 +692,6 @@
                         videoPopup.style.display = 'flex';
                         document.body.style.overflow = 'hidden';
                         
-                        // 動画再生
                         videoPlayer.play();
                     });
                 } else {
@@ -731,7 +716,6 @@
             return messageDiv;
         }
         
-        // メッセージを描画
         function renderMessages() {
             const messagesContainer = document.getElementById('messages');
             messagesContainer.innerHTML = '';
@@ -750,9 +734,7 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
         
-        // 初期化
         document.addEventListener('DOMContentLoaded', function() {
-            // ポップアップの閉じる処理
             function setupPopupClose(popupId, mediaPlayer = null) {
                 const popup = document.getElementById(popupId);
                 const closeBtn = popup.querySelector('.close-popup');
@@ -778,21 +760,17 @@
                 });
             }
             
-            // 画像ポップアップ設定
             setupPopupClose('imagePopup');
             
-            // 動画ポップアップ設定
             const videoPlayer = document.getElementById('videoPlayer');
             setupPopupClose('videoPopup', videoPlayer);
             
-            // 表示切替ボタン
             document.getElementById('switchButton').addEventListener('click', function() {
                 isSwitched = !isSwitched;
                 updateHeader();
                 renderMessages();
             });
             
-            // アイコン選択
             document.getElementById('iconInput').addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -806,27 +784,39 @@
                 }
             });
             
-            // トーク読み込み
+            // トークファイル読み込み処理
             document.getElementById('loadTalkButton').addEventListener('click', function() {
+                // 既存のイベントリスナーを削除
+                document.getElementById('fileInput').value = '';
+                
+                // fileInputをクリック
                 document.getElementById('fileInput').click();
             });
             
+            // ファイル選択時の処理
             document.getElementById('fileInput').addEventListener('change', function(e) {
                 const file = e.target.files[0];
-                if (file) {
+                if (file && file.name.endsWith('.txt')) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         parseKakaoTalkText(e.target.result);
                     };
                     reader.readAsText(file);
+                } else {
+                    alert('テキストファイル(.txt)を選択してください');
                 }
             });
             
-            // 写真/動画選択
+            // 写真/動画読み込み処理
             document.getElementById('loadMediaButton').addEventListener('click', function() {
+                // 既存のイベントリスナーを削除
+                document.getElementById('mediaInput').value = '';
+                
+                // mediaInputをクリック
                 document.getElementById('mediaInput').click();
             });
             
+            // メディアファイル選択時の処理
             document.getElementById('mediaInput').addEventListener('change', function(e) {
                 mediaFiles = Array.from(e.target.files);
                 renderMessages();
