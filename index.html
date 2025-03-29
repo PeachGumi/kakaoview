@@ -64,7 +64,7 @@
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 15px 10px 70px; /* 下部パディングを入力エリアの高さに合わせて調整 */
+            padding: 15px 10px 80px; /* 下部パディングを入力エリアの高さに合わせて調整（増やしました） */
             background-color: #f5f5f5;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
@@ -72,16 +72,17 @@
         }
         
         .input-container {
-            position: fixed; /* stickyからfixedに変更 */
+            position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background-color: #f5f5f5;
             border-top: 1px solid #ddd;
-            z-index: 99; /* ヘッダーより低いz-indexに */
+            z-index: 99;
             box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
             max-width: 500px;
             margin: 0 auto;
+            padding-bottom: env(safe-area-inset-bottom); /* 安全領域を考慮 */
         }
         
         .input-area {
@@ -416,21 +417,21 @@
 
         @media (max-width: 500px) {
             .chat-messages {
-                padding-bottom: 60px; /* モバイル用に調整 */
+                padding-bottom: 90px; /* モバイル用にさらに余裕を持たせました */
             }
             
             .input-area {
-                padding: 8px;
+                padding: 10px; /* パディングを少し増やしました */
             }
             
             .file-input-label, .file-input-button {
-                padding: 6px 8px;
-                font-size: 12px;
+                padding: 8px 10px; /* パディングを調整 */
+                font-size: 13px; /* フォントサイズを少し大きく */
             }
             
             .icon-preview {
-                width: 36px;
-                height: 36px;
+                width: 38px;
+                height: 38px;
             }
             
             .message-bubble {
@@ -525,7 +526,7 @@
             const inputHeight = inputContainer.offsetHeight;
             
             // メッセージエリアにパディングを設定
-            messages.style.paddingBottom = `${inputHeight}px`;
+            messages.style.paddingBottom = `${inputHeight + 10}px`; // 余裕を持たせる
             
             scrollToBottom();
         }
