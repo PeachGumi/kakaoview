@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="app-version" content="1.0.8">
-    <title>カカオトーク風トーク画面 v1.0.8</title>
+    <meta name="app-version" content="1.0.9">
+    <title>カカオトーク風トーク画面 v1.0.9</title>
     <style>
         * {
             margin: 0;
@@ -79,12 +79,13 @@
         .input-container {
             background-color: #f5f5f5;
             border-top: 1px solid #ddd;
-            z-index: 99;
+            z-index: 10; /* 適切なz-indexに変更 */
             box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
             padding-bottom: env(safe-area-inset-bottom);
             flex-shrink: 0;
             position: sticky;
             bottom: 0;
+            width: 100%;
         }
         
         .input-area {
@@ -94,6 +95,13 @@
             padding: 10px;
             width: 100%;
             min-height: 60px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .input-area::-webkit-scrollbar {
+            display: none;
         }
 
         .header-name {
@@ -111,6 +119,7 @@
             font-size: 12px;
             cursor: pointer;
             transition: background-color 0.3s;
+            flex-shrink: 0;
         }
         
         .date-divider {
@@ -314,6 +323,7 @@
             overflow-x: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            min-width: 200px; /* 最小幅を確保 */
         }
         
         .file-input-area::-webkit-scrollbar {
@@ -412,18 +422,16 @@
                 padding: 10px;
                 flex-wrap: nowrap;
                 overflow-x: auto;
-                scrollbar-width: none;
-                -ms-overflow-style: none;
+                -webkit-overflow-scrolling: touch;
             }
             
-            .input-area::-webkit-scrollbar {
-                display: none;
+            .file-input-area {
+                min-width: 180px; /* スマホでの最小幅を調整 */
             }
             
             .file-input-label, .file-input-button {
-                padding: 8px 12px;
+                padding: 8px 10px;
                 font-size: 13px;
-                min-width: 60px;
             }
             
             .icon-preview {
@@ -442,15 +450,6 @@
             
             .chat-messages {
                 padding-bottom: 80px;
-            }
-            
-            .icon-input-area {
-                flex-shrink: 0;
-            }
-            
-            .file-input-area {
-                flex-shrink: 0;
-                min-width: max-content;
             }
         }
     </style>
@@ -489,7 +488,7 @@
     </div>
 
     <!-- バージョン情報表示 -->
-    <div class="version-info" id="versionDisplay">v1.0.8</div>
+    <div class="version-info" id="versionDisplay">v1.0.9</div>
 
     <div class="media-popup" id="imagePopup">
         <span class="close-popup">&times;</span>
@@ -509,7 +508,7 @@
 
     <script>
         // バージョン情報
-        const version = '1.0.8';
+        const version = '1.0.9';
         document.title = `カカオトーク風トーク画面 v${version}`;
         document.getElementById('versionDisplay').textContent = `v${version}`;
         console.log(`カカオトーク風トーク画面 v${version}`);
