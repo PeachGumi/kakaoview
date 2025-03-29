@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="app-version" content="1.0.4">
-    <title>カカオトーク風トーク画面</title>
+    <meta name="app-version" content="1.0.5">
+    <title>カカオトーク風トーク画面 v1.0.5</title>
     <style>
         * {
             margin: 0;
@@ -30,7 +30,6 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow: hidden;
         }
         
         .chat-container {
@@ -59,7 +58,6 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            position: relative;
         }
         
         .chat-messages {
@@ -78,7 +76,8 @@
             z-index: 99;
             box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
             padding-bottom: env(safe-area-inset-bottom);
-            flex-shrink: 0;
+            position: sticky;
+            bottom: 0;
         }
         
         .input-area {
@@ -87,6 +86,7 @@
             gap: 10px;
             padding: 10px;
             width: 100%;
+            min-height: 60px;
         }
 
         .header-name {
@@ -412,11 +412,13 @@
         @media (max-width: 500px) {
             .input-area {
                 padding: 10px;
+                flex-wrap: wrap;
             }
             
             .file-input-label, .file-input-button {
                 padding: 8px 10px;
                 font-size: 13px;
+                min-width: 80px;
             }
             
             .icon-preview {
@@ -469,7 +471,7 @@
     </div>
 
     <!-- バージョン情報表示 -->
-    <div class="version-info" id="versionDisplay"></div>
+    <div class="version-info" id="versionDisplay">v1.0.5</div>
 
     <div class="media-popup" id="imagePopup">
         <span class="close-popup">&times;</span>
@@ -488,10 +490,8 @@
     </div>
 
     <script>
-        // バージョン情報を取得して設定
-        const version = document.querySelector('meta[name="app-version"]').content;
-        document.title = `カカオトーク風トーク画面 v${version}`;
-        document.getElementById('versionDisplay').textContent = `v${version}`;
+        // バージョン情報
+        const version = '1.0.5';
         console.log(`カカオトーク風トーク画面 v${version}`);
 
         let me = null;
