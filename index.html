@@ -30,6 +30,7 @@
             display: flex;
             flex-direction: column;
             position: relative;
+            overflow: hidden;
         }
         
         .chat-container {
@@ -58,6 +59,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            position: relative;
         }
         
         .chat-messages {
@@ -76,6 +78,7 @@
             z-index: 99;
             box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
             padding-bottom: env(safe-area-inset-bottom);
+            flex-shrink: 0; /* 追加: 入力エリアが縮小しないように */
         }
         
         .input-area {
@@ -691,7 +694,7 @@
                 )
                 .filter(msg => isVideo ? msg.isVideo : msg.isPhoto);
             
-            const targetIndex = targetMessagesInSameMinute.length - 1;
+            const targetIndex = targetMessagesInsameMinute.length - 1;
             
             if (matchingFiles[targetIndex]) {
                 return URL.createObjectURL(matchingFiles[targetIndex]);
