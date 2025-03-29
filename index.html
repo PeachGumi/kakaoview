@@ -2,9 +2,8 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- バージョン番号はここだけに定義 -->
-    <meta name="app-version" content="1.0.1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="app-version" content="1.0.2">
     <title>カカオトーク風トーク画面</title>
     <style>
         * {
@@ -19,6 +18,7 @@
             line-height: 1.6;
             height: 100vh;
             overflow: hidden;
+            padding-bottom: env(safe-area-inset-bottom);
         }
         
         .main-container {
@@ -26,17 +26,18 @@
             width: 100%;
             margin: 0 auto;
             height: 100vh;
-            position: relative;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
         
         .chat-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            position: relative;
             overflow: hidden;
+            position: relative;
+            padding-bottom: 60px;
         }
         
         .chat-header {
@@ -76,17 +77,16 @@
             padding: 15px 10px;
             background-color: #f5f5f5;
             -webkit-overflow-scrolling: touch;
-            margin-bottom: 60px; /* 修正: 70px → 60px */
-            scrollbar-width: thin; /* 追加 */
-            scrollbar-color: #ccc transparent; /* 追加 */
+            scrollbar-width: thin;
+            scrollbar-color: #ccc transparent;
         }
         
         .chat-messages::-webkit-scrollbar {
-            width: 4px; /* 追加 */
+            width: 4px;
         }
         
         .chat-messages::-webkit-scrollbar-thumb {
-            background-color: #ccc; /* 追加 */
+            background-color: #ccc;
         }
         
         .date-divider {
@@ -274,15 +274,15 @@
             width: 100%;
             max-width: 500px;
             background-color: #f5f5f5;
-            padding: 8px 10px; /* 修正: パディング調整 */
+            padding: 8px 10px;
             box-sizing: border-box;
             border-top: 1px solid #ddd;
             display: flex;
             align-items: center;
             gap: 10px;
-            height: 60px; /* 修正: 70px → 60px */
+            height: 60px;
             z-index: 100;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1); /* 追加 */
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
         }
         
         .icon-input-area {
@@ -391,7 +391,6 @@
             z-index: 1001;
         }
 
-        /* バージョン情報表示スタイル */
         .version-info {
             position: fixed;
             bottom: 5px;
@@ -405,19 +404,18 @@
         }
 
         @media (max-width: 500px) {
-            .chat-messages {
-                margin-bottom: 55px; /* 修正: モバイル用に調整 */
-                padding-bottom: 15px; /* 追加 */
+            .chat-container {
+                padding-bottom: 55px;
             }
             
             .input-area {
-                height: 55px; /* 修正: モバイル用に高さ調整 */
-                padding: 6px 8px; /* 修正: モバイル用パディング調整 */
+                height: 55px;
+                padding: 6px 8px;
             }
             
             .file-input-label, .file-input-button {
-                padding: 6px 8px; /* 修正: ボタンサイズ調整 */
-                font-size: 12px; /* 修正: フォントサイズ調整 */
+                padding: 6px 8px;
+                font-size: 12px;
             }
             
             .icon-preview {
@@ -433,6 +431,11 @@
                 max-width: 200px;
                 max-height: 200px;
             }
+        }
+
+        /* iOS向けの追加スタイル */
+        .ios-device .input-area {
+            padding-bottom: env(safe-area-inset-bottom);
         }
     </style>
 </head>
@@ -490,13 +493,161 @@
         document.getElementById('versionDisplay').textContent = `v${version}`;
         console.log(`カカオトーク風トーク画面 v${version}`);
 
+        // iOSデバイスかどうかを判定
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+        if (isIOS) {
+            document.body.classList.add('ios-device');
+        }
+
         let me = null;
         let you = null;
         let isSwitched = false;
-        let yourIcon = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+';
+        let yourIcon = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI4Ii8+PC9zdmc+';
         let originalMessages = [];
         let mediaFiles = [];
-        
+
+        // レイアウト調整関数
+        function adjustLayout() {
+            const inputArea = document.querySelector('.input-area');
+            const messages = document.getElementById('messages');
+            
+            // 入力エリアの実際の高さを計算（パディングとボーダーを含む）
+            const inputHeight = inputArea.offsetHeight + 
+                              parseInt(window.getComputedStyle(inputArea).marginTop) + 
+                              parseInt(window.getComputedStyle(inputArea).marginBottom);
+            
+            // メッセージエリアのマージンを動的に設定
+            messages.style.marginBottom = `${inputHeight}px`;
+            
+            // チャットコンテナのパディングも更新
+            document.querySelector('.chat-container').style.paddingBottom = `${inputHeight}px`;
+            
+            // スクロールを最下部に
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // ページ読み込み時に高さを再計算
+        document.addEventListener('DOMContentLoaded', function() {
+            adjustLayout();
+            
+            // リサイズ時にも再計算（キーボード出現時など）
+            window.addEventListener('resize', function() {
+                adjustLayout();
+                setTimeout(adjustLayout, 300); // キーボードアニメーション後に再計算
+            });
+            
+            // メッセージ追加時にも再計算
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.addedNodes.length) {
+                        adjustLayout();
+                    }
+                });
+            });
+            
+            observer.observe(document.getElementById('messages'), {
+                childList: true,
+                subtree: true
+            });
+
+            // その他の初期化コード...
+            setupEventListeners();
+            loadSampleData();
+        });
+
+        function setupEventListeners() {
+            const videoPlayer = document.getElementById('videoPlayer');
+            
+            setupPopupClose('imagePopup');
+            setupPopupClose('videoPopup', videoPlayer);
+            
+            document.getElementById('switchButton').addEventListener('click', function() {
+                isSwitched = !isSwitched;
+                updateHeader();
+                renderMessages();
+            });
+            
+            document.getElementById('iconInput').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        yourIcon = e.target.result;
+                        document.getElementById('iconPreview').src = yourIcon;
+                        renderMessages();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            document.getElementById('loadTalkButton').addEventListener('click', function() {
+                document.getElementById('fileInput').click();
+            });
+            
+            document.getElementById('fileInput').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file && file.name.endsWith('.txt')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        parseKakaoTalkText(e.target.result);
+                    };
+                    reader.readAsText(file);
+                } else {
+                    alert('テキストファイル(.txt)を選択してください');
+                }
+            });
+            
+            document.getElementById('loadMediaButton').addEventListener('click', function() {
+                document.getElementById('mediaInput').click();
+            });
+            
+            document.getElementById('mediaInput').addEventListener('change', function(e) {
+                mediaFiles = Array.from(e.target.files);
+                renderMessages();
+            });
+        }
+
+        function loadSampleData() {
+            const sampleData = `2023年5月1日 月曜日
+2023/05/01 11:58, こすも : 写真
+2023/05/01 11:58, ある : 写真2枚
+2023/05/01 11:58, こすも : 動画
+2023/05/01 12:07, ある : こんにちは
+
+2023年10月2日 月曜日
+2023/10/02 9:59, ある : 動画
+2023/10/02 9:59, こすも : 写真3枚`;
+            
+            parseKakaoTalkText(sampleData);
+        }
+
+        function setupPopupClose(popupId, mediaPlayer = null) {
+            const popup = document.getElementById(popupId);
+            const closeBtn = popup.querySelector('.close-popup');
+            
+            closeBtn.addEventListener('click', function() {
+                if (mediaPlayer) {
+                    mediaPlayer.pause();
+                    mediaPlayer.currentTime = 0;
+                }
+                popup.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            popup.addEventListener('click', function(e) {
+                if (e.target === popup) {
+                    if (mediaPlayer) {
+                        mediaPlayer.pause();
+                        mediaPlayer.currentTime = 0;
+                    }
+                    popup.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
         function parseKakaoTalkText(textData) {
             const lines = textData.split('\n');
             const messagesContainer = document.getElementById('messages');
@@ -768,109 +919,8 @@
             });
             
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            adjustLayout(); // レンダリング後にレイアウト調整
         }
-        
-        // キーボード表示時にメッセージをスクロール
-        window.addEventListener('resize', function() {
-            const messages = document.getElementById('messages');
-            messages.scrollTop = messages.scrollHeight;
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            function setupPopupClose(popupId, mediaPlayer = null) {
-                const popup = document.getElementById(popupId);
-                const closeBtn = popup.querySelector('.close-popup');
-                
-                closeBtn.addEventListener('click', function() {
-                    if (mediaPlayer) {
-                        mediaPlayer.pause();
-                        mediaPlayer.currentTime = 0;
-                    }
-                    popup.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                });
-                
-                popup.addEventListener('click', function(e) {
-                    if (e.target === popup) {
-                        if (mediaPlayer) {
-                            mediaPlayer.pause();
-                            mediaPlayer.currentTime = 0;
-                        }
-                        popup.style.display = 'none';
-                        document.body.style.overflow = 'auto';
-                    }
-                });
-            }
-            
-            setupPopupClose('imagePopup');
-            
-            const videoPlayer = document.getElementById('videoPlayer');
-            setupPopupClose('videoPopup', videoPlayer);
-            
-            document.getElementById('switchButton').addEventListener('click', function() {
-                isSwitched = !isSwitched;
-                updateHeader();
-                renderMessages();
-            });
-            
-            document.getElementById('iconInput').addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        yourIcon = e.target.result;
-                        document.getElementById('iconPreview').src = yourIcon;
-                        renderMessages();
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-            
-            // トークファイル読み込み処理
-            document.getElementById('loadTalkButton').addEventListener('click', function() {
-                document.getElementById('fileInput').value = '';
-                document.getElementById('fileInput').click();
-            });
-            
-            // ファイル選択時の処理
-            document.getElementById('fileInput').addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file && file.name.endsWith('.txt')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        parseKakaoTalkText(e.target.result);
-                    };
-                    reader.readAsText(file);
-                } else {
-                    alert('テキストファイル(.txt)を選択してください');
-                }
-            });
-            
-            // 写真/動画読み込み処理
-            document.getElementById('loadMediaButton').addEventListener('click', function() {
-                document.getElementById('mediaInput').value = '';
-                document.getElementById('mediaInput').click();
-            });
-            
-            // メディアファイル選択時の処理
-            document.getElementById('mediaInput').addEventListener('change', function(e) {
-                mediaFiles = Array.from(e.target.files);
-                renderMessages();
-            });
-            
-            // サンプルデータ
-            const sampleData = `2023年5月1日 月曜日
-2023/05/01 11:58, こすも : 写真
-2023/05/01 11:58, ある : 写真2枚
-2023/05/01 11:58, こすも : 動画
-2023/05/01 12:07, ある : こんにちは
-
-2023年10月2日 月曜日
-2023/10/02 9:59, ある : 動画
-2023/10/02 9:59, こすも : 写真3枚`;
-            
-            parseKakaoTalkText(sampleData);
-        });
         
         function updateHeader() {
             const headerName = document.getElementById('headerName');
