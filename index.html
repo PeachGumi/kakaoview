@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- バージョン番号はここだけに定義 -->
+    <meta name="app-version" content="1.0.0">
     <title>カカオトーク風トーク画面</title>
     <style>
         * {
@@ -378,6 +380,19 @@
             z-index: 1001;
         }
 
+        /* バージョン情報表示スタイル */
+        .version-info {
+            position: fixed;
+            bottom: 5px;
+            right: 10px;
+            font-size: 10px;
+            color: #999;
+            z-index: 101;
+            background-color: rgba(245, 245, 245, 0.7);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
         @media (max-width: 500px) {
             .chat-messages {
                 margin-bottom: 70px;
@@ -437,6 +452,9 @@
         </div>
     </div>
 
+    <!-- バージョン情報表示 -->
+    <div class="version-info" id="versionDisplay"></div>
+
     <div class="media-popup" id="imagePopup">
         <span class="close-popup">&times;</span>
         <div class="popup-content">
@@ -454,6 +472,12 @@
     </div>
 
     <script>
+        // バージョン情報を取得して設定
+        const version = document.querySelector('meta[name="app-version"]').content;
+        document.title = `カカオトーク風トーク画面 v${version}`;
+        document.getElementById('versionDisplay').textContent = `v${version}`;
+        console.log(`カカオトーク風トーク画面 v${version}`);
+
         let me = null;
         let you = null;
         let isSwitched = false;
