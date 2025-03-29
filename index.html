@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="app-version" content="1.0.2">
+    <meta name="app-version" content="1.0.3">
     <title>カカオトーク風トーク画面</title>
     <style>
         * {
@@ -37,7 +37,6 @@
             flex-direction: column;
             overflow: hidden;
             position: relative;
-            padding-bottom: 60px;
         }
         
         .chat-header {
@@ -71,6 +70,13 @@
             transition: background-color 0.3s;
         }
         
+        .chat-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
         .chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -88,6 +94,26 @@
         .chat-messages::-webkit-scrollbar-thumb {
             background-color: #ccc;
         }
+        
+        .input-container {
+            position: sticky;
+            bottom: 0;
+            background-color: #f5f5f5;
+            border-top: 1px solid #ddd;
+            z-index: 100;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .input-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        /* その他のスタイルは変更なし（前回と同じ） */
         
         .date-divider {
             text-align: center;
@@ -266,25 +292,6 @@
             font-size: 12px;
         }
         
-        .input-area {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 500px;
-            background-color: #f5f5f5;
-            padding: 8px 10px;
-            box-sizing: border-box;
-            border-top: 1px solid #ddd;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            height: 60px;
-            z-index: 100;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-        }
-        
         .icon-input-area {
             display: flex;
             align-items: center;
@@ -404,13 +411,8 @@
         }
 
         @media (max-width: 500px) {
-            .chat-container {
-                padding-bottom: 55px;
-            }
-            
             .input-area {
-                height: 55px;
-                padding: 6px 8px;
+                padding: 8px;
             }
             
             .file-input-label, .file-input-button {
@@ -432,11 +434,6 @@
                 max-height: 200px;
             }
         }
-
-        /* iOS向けの追加スタイル */
-        .ios-device .input-area {
-            padding-bottom: env(safe-area-inset-bottom);
-        }
     </style>
 </head>
 <body>
@@ -446,23 +443,28 @@
                 <span id="headerName" class="header-name">トーク</span>
                 <button class="switch-button" id="switchButton">表示切替</button>
             </div>
-            <div class="chat-messages" id="messages">
-                <!-- メッセージがここに動的に挿入されます -->
-            </div>
-        </div>
-
-        <div class="input-area">
-            <div class="icon-input-area">
-                <img id="iconPreview" class="icon-preview" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+" alt="アイコン">
-                <label for="iconInput" class="file-input-label">アイコン</label>
-                <input type="file" id="iconInput" accept="image/*">
-            </div>
             
-            <div class="file-input-area">
-                <button class="file-input-button" id="loadTalkButton">トーク</button>
-                <input type="file" id="fileInput" accept=".txt">
-                <button class="file-input-button" id="loadMediaButton">写真/動画</button>
-                <input type="file" id="mediaInput" accept="image/*,video/*" multiple>
+            <div class="chat-content">
+                <div class="chat-messages" id="messages">
+                    <!-- メッセージがここに動的に挿入されます -->
+                </div>
+                
+                <div class="input-container">
+                    <div class="input-area">
+                        <div class="icon-input-area">
+                            <img id="iconPreview" class="icon-preview" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+" alt="アイコン">
+                            <label for="iconInput" class="file-input-label">アイコン</label>
+                            <input type="file" id="iconInput" accept="image/*">
+                        </div>
+                        
+                        <div class="file-input-area">
+                            <button class="file-input-button" id="loadTalkButton">トーク</button>
+                            <input type="file" id="fileInput" accept=".txt">
+                            <button class="file-input-button" id="loadMediaButton">写真/動画</button>
+                            <input type="file" id="mediaInput" accept="image/*,video/*" multiple>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -493,58 +495,43 @@
         document.getElementById('versionDisplay').textContent = `v${version}`;
         console.log(`カカオトーク風トーク画面 v${version}`);
 
-        // iOSデバイスかどうかを判定
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-        if (isIOS) {
-            document.body.classList.add('ios-device');
-        }
-
         let me = null;
         let you = null;
         let isSwitched = false;
-        let yourIcon = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI4Ii8+PC9zdmc+';
+        let yourIcon = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+';
         let originalMessages = [];
         let mediaFiles = [];
 
-        // レイアウト調整関数
-        function adjustLayout() {
-            const inputArea = document.querySelector('.input-area');
+        // メッセージを最下部にスクロール
+        function scrollToBottom() {
             const messages = document.getElementById('messages');
-            
-            // 入力エリアの実際の高さを計算（パディングとボーダーを含む）
-            const inputHeight = inputArea.offsetHeight + 
-                              parseInt(window.getComputedStyle(inputArea).marginTop) + 
-                              parseInt(window.getComputedStyle(inputArea).marginBottom);
-            
-            // メッセージエリアのマージンを動的に設定
-            messages.style.marginBottom = `${inputHeight}px`;
-            
-            // チャットコンテナのパディングも更新
-            document.querySelector('.chat-container').style.paddingBottom = `${inputHeight}px`;
-            
-            // スクロールを最下部に
             messages.scrollTop = messages.scrollHeight;
         }
 
-        // ページ読み込み時に高さを再計算
+        // レイアウト調整
+        function adjustLayout() {
+            const inputContainer = document.querySelector('.input-container');
+            const messages = document.getElementById('messages');
+            
+            // 入力エリアの高さを取得
+            const inputHeight = inputContainer.offsetHeight;
+            
+            // メッセージエリアにパディングを設定
+            messages.style.paddingBottom = `${inputHeight}px`;
+            
+            scrollToBottom();
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
+            // 初期レイアウト調整
             adjustLayout();
             
-            // リサイズ時にも再計算（キーボード出現時など）
-            window.addEventListener('resize', function() {
-                adjustLayout();
-                setTimeout(adjustLayout, 300); // キーボードアニメーション後に再計算
-            });
+            // リサイズ時に再計算
+            window.addEventListener('resize', adjustLayout);
             
-            // メッセージ追加時にも再計算
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    if (mutation.addedNodes.length) {
-                        adjustLayout();
-                    }
-                });
+            // メッセージ追加時にスクロール
+            const observer = new MutationObserver(function() {
+                scrollToBottom();
             });
             
             observer.observe(document.getElementById('messages'), {
@@ -552,23 +539,53 @@
                 subtree: true
             });
 
-            // その他の初期化コード...
+            // イベントリスナー設定
             setupEventListeners();
+            
+            // サンプルデータ読み込み
             loadSampleData();
         });
 
         function setupEventListeners() {
             const videoPlayer = document.getElementById('videoPlayer');
             
+            // ポップアップ閉じる処理
+            function setupPopupClose(popupId, mediaPlayer = null) {
+                const popup = document.getElementById(popupId);
+                const closeBtn = popup.querySelector('.close-popup');
+                
+                closeBtn.addEventListener('click', function() {
+                    if (mediaPlayer) {
+                        mediaPlayer.pause();
+                        mediaPlayer.currentTime = 0;
+                    }
+                    popup.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+                
+                popup.addEventListener('click', function(e) {
+                    if (e.target === popup) {
+                        if (mediaPlayer) {
+                            mediaPlayer.pause();
+                            mediaPlayer.currentTime = 0;
+                        }
+                        popup.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            }
+            
             setupPopupClose('imagePopup');
             setupPopupClose('videoPopup', videoPlayer);
             
+            // 表示切替ボタン
             document.getElementById('switchButton').addEventListener('click', function() {
                 isSwitched = !isSwitched;
                 updateHeader();
                 renderMessages();
             });
             
+            // アイコン変更
             document.getElementById('iconInput').addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -582,6 +599,7 @@
                 }
             });
             
+            // トーク読み込み
             document.getElementById('loadTalkButton').addEventListener('click', function() {
                 document.getElementById('fileInput').click();
             });
@@ -599,6 +617,7 @@
                 }
             });
             
+            // メディア読み込み
             document.getElementById('loadMediaButton').addEventListener('click', function() {
                 document.getElementById('mediaInput').click();
             });
@@ -621,31 +640,6 @@
 2023/10/02 9:59, こすも : 写真3枚`;
             
             parseKakaoTalkText(sampleData);
-        }
-
-        function setupPopupClose(popupId, mediaPlayer = null) {
-            const popup = document.getElementById(popupId);
-            const closeBtn = popup.querySelector('.close-popup');
-            
-            closeBtn.addEventListener('click', function() {
-                if (mediaPlayer) {
-                    mediaPlayer.pause();
-                    mediaPlayer.currentTime = 0;
-                }
-                popup.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            });
-            
-            popup.addEventListener('click', function(e) {
-                if (e.target === popup) {
-                    if (mediaPlayer) {
-                        mediaPlayer.pause();
-                        mediaPlayer.currentTime = 0;
-                    }
-                    popup.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }
-            });
         }
 
         function parseKakaoTalkText(textData) {
@@ -918,8 +912,7 @@
                 messagesContainer.appendChild(createMessageElement(msg, isSwitched, index));
             });
             
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            adjustLayout(); // レンダリング後にレイアウト調整
+            scrollToBottom();
         }
         
         function updateHeader() {
